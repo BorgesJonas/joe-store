@@ -37,7 +37,8 @@ export const config = {
             user.password
           );
 
-          if (!isMatch) {
+          if (isMatch) {
+            // Alterado de !isMatch para isMatch
             return {
               id: user.id,
               name: user.name,

@@ -5,6 +5,8 @@ import { sampleData } from "./sample-data";
  * In order to insert it you can run
  * npx tsx ./db/seed
  */
+
+/** To open the prisma studio run npx prisma studio */
 async function main() {
   const prisma = new PrismaClient();
   await prisma.product.deleteMany();
