@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { UserButton } from "../user-button";
 
 export default function Menu() {
   return (
@@ -22,11 +23,7 @@ export default function Menu() {
           </Link>
         </Button>
 
-        <Button asChild>
-          <Link href="/sign-in">
-            <UserIcon /> Sign In
-          </Link>
-        </Button>
+        <UserButton />
       </nav>
       <nav className="md:hidden">
         <Sheet>
@@ -43,11 +40,7 @@ export default function Menu() {
               </Link>
             </Button>
 
-            <Button asChild>
-              <Link href="/sign-in">
-                <UserIcon /> Sign In
-              </Link>
-            </Button>
+            <UserButton />
             <SheetDescription />
           </SheetContent>
         </Sheet>
