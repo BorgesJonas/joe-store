@@ -7,15 +7,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInDefaultValues } from "@/lib/consts";
-import { signInUser } from "@/lib/actions/user.actions";
+import { signUpDefaultValues } from "@/lib/consts";
+import { signUpUser } from "@/lib/actions/user.actions";
 import { useSearchParams } from "next/navigation";
 
-export function CredentialsForm() {
+export function SignUpForm() {
   const { pending } = useFormStatus();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
-  const [data, action] = useActionState(signInUser, {
+  const [data, action] = useActionState(signUpUser, {
     success: false,
     message: "",
   });
@@ -25,6 +25,17 @@ export function CredentialsForm() {
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
+          <Label htmlFor="name">Name</Label>
+          <Input
+            required
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            defaultValue={signUpDefaultValues.name}
+          />
+        </div>
+        <div>
           <Label htmlFor="email">Email</Label>
           <Input
             required
@@ -32,7 +43,7 @@ export function CredentialsForm() {
             name="email"
             type="email"
             autoComplete="email"
-            defaultValue={signInDefaultValues.email}
+            defaultValue={signUpDefaultValues.email}
           />
         </div>
         <div>
@@ -43,7 +54,18 @@ export function CredentialsForm() {
             name="password"
             type="password"
             autoComplete="password"
-            defaultValue={signInDefaultValues.password}
+            defaultValue={signUpDefaultValues.password}
+          />
+        </div>
+        <div>
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Input
+            required
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            autoComplete="confirmPassword"
+            defaultValue={signUpDefaultValues.confirmPassword}
           />
         </div>
         <div>
@@ -53,7 +75,7 @@ export function CredentialsForm() {
             className="w-full"
             variant="default"
           >
-            {pending ? "Signing in" : "Sign In"}
+            {pending ? "Submiting" : "Sign up"}
           </Button>
         </div>
         {data && !data.success && (
@@ -61,9 +83,9 @@ export function CredentialsForm() {
         )}
 
         <div className="text-sm text-center text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="text-primary">
-            Sign up
+          Already have an account?{" "}
+          <Link href="/sign-in" className="text-primary">
+            Sign in
           </Link>
         </div>
       </div>
