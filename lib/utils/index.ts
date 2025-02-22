@@ -1,3 +1,4 @@
+import { CartItem } from "@/@types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -33,4 +34,33 @@ export async function formatError(error: any) {
       ? error.message
       : JSON.stringify(error.message);
   }
+}
+
+export function formatPrice(price: number | string) {
+  if (typeof price === "number") {
+    return Math.round((price + Number.EPSILON) * 100) / 100;
+  } else if (typeof price === "string") {
+    return Math.round((Number(price) + Number.EPSILON) * 100) / 100;
+  } else {
+    throw new Error("Price must be number or string");
+  }
+}
+
+export function calculateCartPrice(items: CartItem[]) {
+  const reducedPrice = items.reduce(
+    (value, item) => value + Number(item.price) * item.quantity,
+    0
+  );
+
+  const itemsPrice = formatPrice(reducedPrice);
+  const shippingPrice = formatPrice(itemsPrice > 100 ? 0 : 10);
+  const taxPrice = formatPrice(itemsPrice * 0.15);
+  const totalPrice = formatPrice(itemsPrice + shippingPrice + taxPrice);
+
+  return {
+    itemsPrice: itemsPrice.toFixed(2),
+    shippingPrice: shippingPrice.toFixed(2),
+    taxPrice: taxPrice.toFixed(2),
+    totalPrice: totalPrice.toFixed(2),
+  };
 }

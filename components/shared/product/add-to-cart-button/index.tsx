@@ -25,13 +25,9 @@ export function AddToCartButton({ item }: AddToCartButtonProps) {
     }
 
     if (response.success) {
-      toast(`${item.name} added to cart`, {
+      toast(response.message, {
         action: (
-          <Button
-            aria-label="Go to Cart"
-            onClick={() => router.push("/cart")}
-            className="bg-primary text-white hover:bg-gray-800"
-          >
+          <Button aria-label="Go to Cart" onClick={() => router.push("/cart")}>
             Go to Cart
           </Button>
         ),
