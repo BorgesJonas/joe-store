@@ -2,6 +2,12 @@ import { CartItem } from "@/@types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
+  currency: "USD",
+  style: "currency",
+  minimumFractionDigits: 2,
+});
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -63,4 +69,16 @@ export function calculateCartPrice(items: CartItem[]) {
     taxPrice: taxPrice.toFixed(2),
     totalPrice: totalPrice.toFixed(2),
   };
+}
+
+export function formatCurrency(amount: number | string | null) {
+  if (typeof amount === "number") {
+    return CURRENCY_FORMATTER.format(amount);
+  }
+
+  if (typeof amount === "string") {
+    return CURRENCY_FORMATTER.format(Number(amount));
+  }
+
+  return "NaN";
 }
