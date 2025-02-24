@@ -25,7 +25,7 @@ export function CartTable({ cart }: CartTableProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const totalValue = cart.items.reduce(
+  const totalItems = cart.items.reduce(
     (value, item) => value + item.quantity,
     0
   );
@@ -134,7 +134,7 @@ export function CartTable({ cart }: CartTableProps) {
           <Card>
             <CardContent className="p-4 gap-4">
               <div className="pb-3 text-xl">
-                Subtotal: {totalValue}
+                Subtotal ({totalItems}):
                 <span className="font-bold">
                   {formatCurrency(cart.itemsPrice)}
                 </span>
