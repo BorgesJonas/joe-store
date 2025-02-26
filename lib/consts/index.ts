@@ -12,6 +12,12 @@ export const LATEST_PRODUCTS_LIMIT = Number(
   process.env.NEXT_PUBLIC_LATEST_PRODUCTS_LIMIT || 4
 );
 
+export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
+  ? process.env.PAYMENT_METHODS.split(",")
+  : [];
+
+export const DEFAULT_PAYMENT_METHOD = process.env.DEFAULT_PAYMENT_METHOD;
+
 export const signInDefaultValues = {
   email: "",
   password: "",
