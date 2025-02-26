@@ -14,9 +14,10 @@ export const LATEST_PRODUCTS_LIMIT = Number(
 
 export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
   ? process.env.PAYMENT_METHODS.split(",")
-  : [];
+  : ["PayPal", "Stripe", "CashOnDelivery"];
 
-export const DEFAULT_PAYMENT_METHOD = process.env.DEFAULT_PAYMENT_METHOD;
+export const DEFAULT_PAYMENT_METHOD =
+  process.env.DEFAULT_PAYMENT_METHOD || PAYMENT_METHODS[0];
 
 export const signInDefaultValues = {
   email: "",
