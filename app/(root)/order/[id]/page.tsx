@@ -1,6 +1,8 @@
 import { getOrderById } from "@/lib/actions/order.actions";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { OrderDetailsTable } from "./components/order-details-table";
+import { ShippingAddress } from "@/@types";
 
 export const metadata: Metadata = {
   title: "Order Details",
@@ -18,5 +20,12 @@ export default async function OrderDetails(props: OrderDetailsProps) {
     notFound();
   }
 
-  return <>DETAIL {JSON.stringify(order)}</>;
+  return (
+    <OrderDetailsTable
+      order={{
+        ...order,
+        shippingAddress: order.shippingAddress as ShippingAddress,
+      }}
+    />
+  );
 }
