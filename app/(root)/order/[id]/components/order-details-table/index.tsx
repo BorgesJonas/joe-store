@@ -14,12 +14,23 @@ import {
 import { formatCurrency, formatDateTime, formatId } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import {
+  createPayPalOrder,
+  approvePayPalOrder,
+} from "@/lib/actions/order.actions";
+import { LoadingPayPal } from "../loading-paypal";
+import { toast } from "sonner";
 
 interface OrderDetailsTableProps {
   order: Order;
+  paypalClientId: string;
 }
 
-export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
+export function OrderDetailsTable({
+  order,
+  paypalClientId,
+}: OrderDetailsTableProps) {
   const {
     id,
     shippingAddress,
@@ -35,12 +46,36 @@ export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
     deliveredAt,
   } = order;
 
+  // const [{ isPending, isRejected }] = usePayPalScriptReducer();
+
+  async function handleCreatePayPalOrder() {
+    const response = await createPayPalOrder(order.id);
+
+    if (!response.success) {
+      toast.error(response.message);
+      return;
+    }
+
+    return response.data;
+  }
+
+  async function handleApprovePayPalOrder(data: { orderID: string }) {
+    const response = await approvePayPalOrder(order.id, data);
+
+    if (!response.success) {
+      toast.error(response.message);
+      return;
+    }
+
+    toast.success(response.message);
+  }
+
   return (
     <>
       <h1 className="py-4 text-2xl">Order {formatId(id)}</h1>
       <div className="grid md:grid-cols-3 md:gap-5">
-        <div className="col-span-2 space-4-y overflow-x-auto">
-          <Card className="my-2">
+        <div className="col-span-2 space-4-y overlow-x-auto">
+          <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">Payment Method</h2>
               <p className="mb-2">{paymentMethod}</p>
@@ -53,7 +88,7 @@ export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
               )}
             </CardContent>
           </Card>
-          <Card>
+          <Card className="my-2">
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">Shipping Address</h2>
               <p>{shippingAddress.fullName}</p>
@@ -63,14 +98,14 @@ export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
               </p>
               {isDelivered ? (
                 <Badge variant="secondary">
-                  Paid at {formatDateTime(deliveredAt!).dateTime}
+                  Delivered at {formatDateTime(deliveredAt!).dateTime}
                 </Badge>
               ) : (
-                <Badge variant="destructive">Not delivered</Badge>
+                <Badge variant="destructive">Not Delivered</Badge>
               )}
             </CardContent>
           </Card>
-          <Card className="my-2">
+          <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">Order Items</h2>
               <Table>
@@ -99,7 +134,7 @@ export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
                         </Link>
                       </TableCell>
                       <TableCell>
-                        <span className="px-2">{item.quantity}</span>
+                        <span className="px-2">{item.qty}</span>
                       </TableCell>
                       <TableCell className="text-right">
                         ${item.price}
@@ -111,7 +146,6 @@ export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
             </CardContent>
           </Card>
         </div>
-
         <div>
           <Card>
             <CardContent className="p-4 gap-4 space-y-4">
@@ -131,6 +165,21 @@ export function OrderDetailsTable({ order }: OrderDetailsTableProps) {
                 <div>Total</div>
                 <div>{formatCurrency(totalPrice)}</div>
               </div>
+
+              {/* PayPal Payment */}
+              {!isPaid && paymentMethod === "PayPal" && (
+                <div>
+                  <PayPalScriptProvider
+                    options={{ clientId: paypalClientId, currency: "BRL" }}
+                  >
+                    <LoadingPayPal />
+                    <PayPalButtons
+                      createOrder={handleCreatePayPalOrder}
+                      onApprove={handleApprovePayPalOrder}
+                    />
+                  </PayPalScriptProvider>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

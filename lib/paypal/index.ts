@@ -16,7 +16,7 @@ export const PAYPAL = {
         purchase_units: [
           {
             amount: {
-              currency_code: "USD",
+              currency_code: "BRL",
               value: price,
             },
           },
@@ -26,7 +26,6 @@ export const PAYPAL = {
 
     return handleResponse(response);
   },
-
   capturePayment: async function capturePayment(orderId: string) {
     const accessToken = await generateAccessToken();
     const url = `${base}/v2/checkout/orders/${orderId}/capture`;
@@ -38,13 +37,12 @@ export const PAYPAL = {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     return handleResponse(response);
   },
 };
 
-// Generate paypal  access token
-export async function generateAccessToken() {
+// Generate paypal access token
+async function generateAccessToken() {
   const { PAYPAL_CLIENT_ID, PAYPAL_APP_SECRET } = process.env;
   const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_APP_SECRET}`).toString(
     "base64"
@@ -65,9 +63,11 @@ export async function generateAccessToken() {
 
 async function handleResponse(response: Response) {
   if (response.ok) {
-    return await response.json();
+    return response.json();
   } else {
     const errorMessage = await response.text();
     throw new Error(errorMessage);
   }
 }
+
+export { generateAccessToken };
