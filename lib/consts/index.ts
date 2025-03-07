@@ -39,4 +39,4 @@ export const shippingAddressDefaultValues: ShippingAddress = {
   country: "USA",
 };
 
-export const PAGE_SIZE = 2;
+export const PAGE_SIZE = 12;
