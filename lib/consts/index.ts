@@ -38,3 +38,5 @@ export const shippingAddressDefaultValues: ShippingAddress = {
   postalCode: "123456",
   country: "USA",
 };
+
+export const PAGE_SIZE = 2;

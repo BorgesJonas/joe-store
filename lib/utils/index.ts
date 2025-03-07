@@ -1,6 +1,7 @@
 import { CartItem } from "@/@types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import qs from "query-string";
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
   currency: "USD",
@@ -89,7 +90,7 @@ export function formatId(id: string) {
 }
 
 // Format date and times
-export const formatDateTime = (dateString: Date) => {
+export function formatDateTime(dateString: Date) {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: "short", // abbreviated month name (e.g., 'Oct')
     year: "numeric", // abbreviated month name (e.g., 'Oct')
@@ -132,4 +133,26 @@ export const formatDateTime = (dateString: Date) => {
     dateOnly: formattedDate,
     timeOnly: formattedTime,
   };
-};
+}
+
+export function buildUrlQuery({
+  params,
+  key,
+  value,
+}: {
+  params: string;
+  key: string;
+  value: string | null;
+}) {
+  const query = qs.parse(params);
+  query[key] = value;
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query,
+    },
+    {
+      skipNull: true,
+    }
+  );
+}
