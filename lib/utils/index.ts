@@ -9,6 +9,8 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
 });
 
+const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -79,6 +81,18 @@ export function formatCurrency(amount: number | string | null) {
 
   if (typeof amount === "string") {
     return CURRENCY_FORMATTER.format(Number(amount));
+  }
+
+  return "NaN";
+}
+
+export function formatNumber(amount: number | string | null) {
+  if (typeof amount === "number") {
+    return NUMBER_FORMATTER.format(amount);
+  }
+
+  if (typeof amount === "string") {
+    return NUMBER_FORMATTER.format(Number(amount));
   }
 
   return "NaN";
