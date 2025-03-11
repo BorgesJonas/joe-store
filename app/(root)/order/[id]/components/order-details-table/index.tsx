@@ -1,6 +1,5 @@
 "use client";
 
-import { Order } from "@/@types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "sonner";
 import { formatCurrency, formatDateTime, formatId } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
@@ -20,14 +20,12 @@ import {
   approvePayPalOrder,
 } from "@/lib/actions/order.actions";
 import { LoadingPayPal } from "../loading-paypal";
-import { toast } from "sonner";
-
-interface OrderDetailsTableProps {
-  order: Order;
-  paypalClientId: string;
-}
+import { OrderDetailsTableProps } from "./types";
+import { MarkAsPaidButton } from "../mark-as-paid-button";
+import { MarkAsDeliveredButton } from "../mark-as-delivered";
 
 export function OrderDetailsTable({
+  isAdmin,
   order,
   paypalClientId,
 }: OrderDetailsTableProps) {
@@ -45,8 +43,6 @@ export function OrderDetailsTable({
     paidAt,
     deliveredAt,
   } = order;
-
-  // const [{ isPending, isRejected }] = usePayPalScriptReducer();
 
   async function handleCreatePayPalOrder() {
     const response = await createPayPalOrder(order.id);
@@ -179,6 +175,14 @@ export function OrderDetailsTable({
                     />
                   </PayPalScriptProvider>
                 </div>
+              )}
+              {/** CASH ON DELIVERY */}
+              {isAdmin && !isPaid && paymentMethod === "CashOnDelivery" && (
+                <MarkAsPaidButton orderId={id} />
+              )}
+
+              {isAdmin && isPaid && !isDelivered && (
+                <MarkAsDeliveredButton orderId={id} />
               )}
             </CardContent>
           </Card>
