@@ -39,4 +39,19 @@ export const shippingAddressDefaultValues: ShippingAddress = {
   country: "USA",
 };
 
+export const productDefaultValues = {
+  name: "",
+  slug: "",
+  category: "",
+  images: [],
+  brand: "",
+  descritpion: "",
+  price: "0",
+  stock: 0,
+  rating: "0",
+  numReviews: "0",
+  isFeatured: false,
+  banner: null,
+};
+
 export const PAGE_SIZE = 12;
