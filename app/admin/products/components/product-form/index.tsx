@@ -256,8 +256,8 @@ export function ProductForm(props: ProductFormProps) {
               {isFeatured && !banner && (
                 <UploadButton
                   endpoint="imageUploader"
-                  onClientUploadComplete={(res: { url: string }[]) => {
-                    form.setValue("banner", res[0].url);
+                  onClientUploadComplete={(response: { url: string }[]) => {
+                    form.setValue("banner", response[0].url);
                   }}
                   onUploadError={(error: Error) => {
                     toast.error(`Error: ${JSON.stringify(error)}`);

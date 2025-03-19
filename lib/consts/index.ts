@@ -55,3 +55,5 @@ export const productDefaultValues = {
 };
 
 export const PAGE_SIZE = 12;
+
+export const USER_ROLES = ["admin", "user"];
