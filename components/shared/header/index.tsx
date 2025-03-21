@@ -2,13 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { APP_NAME } from "@/lib/consts";
 import Menu from "./components/menu";
+import { CategoryDrawer } from "./components/category-drawer";
+import { Search } from "./components/search";
 
 export default function Header() {
   return (
     <header className="w-full border-b">
       <div className="wrapper flex-between">
         <div className="flex-start">
-          <Link href="/" className="flex-start">
+          <CategoryDrawer />
+          <Link href="/" className="flex-start ml-4">
             <Image
               src="/images/logo.svg"
               alt={`${APP_NAME} logo`}
@@ -21,7 +24,9 @@ export default function Header() {
             </span>
           </Link>
         </div>
-
+        <div className="hidden md:block">
+          <Search />
+        </div>
         <Menu />
       </div>
     </header>
